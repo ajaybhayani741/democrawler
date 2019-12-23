@@ -1,0 +1,33 @@
+<%= text_field_tag "url", "", placeholder: "enter url" %>
+<%= button_tag 'Get sitemap', id: 'btn-submit' %>
+
+<div id="links" style="padding: 10px;"></div>
+
+<script type="text/javascript">
+    $('#btn-submit').click(function(){
+        url = $('#url').val();
+        restring = "";
+        data = {'url': url}
+        $.post("/sitemap", data, function(result){
+            tree = result['links'];
+            console.log('tree', tree);
+            j = 0;
+            $.each(tree, function(i,a){
+              
+                $.each(a, function(i_,a_){
+                      j = j + 1
+                    restring = restring + "<h5>" + j + ". " +  i_ + "</h5>";    
+                    restring = restring + "<ul>";    
+                    $.each(a_, function(i__,a__){                    
+                        restring = restring + "<li>" + a__ + "</li>";    
+                    })
+                    restring = restring + "</ul>";    
+                    // restring = restring + "<br><br>";    
+                })
+                
+                
+            });
+            $('#links').html(restring)
+        });
+    });
+</script>
